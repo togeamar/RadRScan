@@ -9,3 +9,8 @@ buildscript {
         classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     }
 }
+allprojects {
+    repositories {
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
+    }
+}

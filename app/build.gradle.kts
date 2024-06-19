@@ -66,6 +66,7 @@ dependencies {
 
     //ai
     implementation("com.google.ai.client.generativeai:generativeai:0.8.0")
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
     implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

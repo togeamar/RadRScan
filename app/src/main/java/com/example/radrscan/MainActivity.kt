@@ -22,6 +22,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,13 +51,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.rememberImagePainter
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.radrscan.ui.theme.RadRScanTheme
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
@@ -163,24 +170,20 @@ fun Greeting() {
         verticalArrangement = Arrangement.Bottom
     ) {
         if (loading){
-            Column(modifier = Modifier.fillMaxSize()) {
-                val infiniteTransition = rememberInfiniteTransition()
-                val rotation by infiniteTransition.animateFloat(
-                    initialValue = 0f,
-                    targetValue = 360f,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(durationMillis = 1000, easing = LinearEasing),
-                        repeatMode = RepeatMode.Restart
-                    )
-                )
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(colorResource(id = R.color.back))) {
+                val composition by rememberLottieComposition(
+                    spec = LottieCompositionSpec.RawRes(R.raw.loading_animation))
 
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(modifier = Modifier.rotate(rotation))
+                LottieAnimation(composition = composition, iterations = LottieConstants.IterateForever)
                 }
             }
+
         }
         if (capturedImageUri.path?.isNotEmpty() == true)
         {
@@ -227,8 +230,11 @@ fun Greeting() {
             }
 
             Image(
-                modifier = Modifier.height(300.dp).width(300.dp)
-                    .padding(16.dp, 8.dp),
+                modifier = Modifier
+                    .height(400.dp)
+                    .width(400.dp)
+                    .padding(16.dp, 8.dp)
+                    .padding(bottom = 50.dp),
                 painter = rememberImagePainter(capturedImageUri),
                 contentDescription = null
             )
@@ -236,8 +242,11 @@ fun Greeting() {
         else
         {
             Image(
-                modifier = Modifier.height(300.dp).width(300.dp)
-                    .padding(16.dp, 8.dp),
+                modifier = Modifier
+                    .height(300.dp)
+                    .width(300.dp)
+                    .padding(16.dp, 8.dp)
+                    .padding(bottom = 50.dp),
                 painter = painterResource(id = R.drawable.ic_image),
                 contentDescription = null
             )
