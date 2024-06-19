@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "90185783044",
+    "project_id": "radrscan",
+    "storage_bucket": "radrscan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90185783044:android:dfc375cb6a58404c9ca251",
+        "android_client_info": {
+          "package_name": "com.example.radrscan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo-bXZ5h-GTv9eyjY73O0Grdb8Fle8oyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

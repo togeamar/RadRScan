@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.Manifest
+import android.content.ContentValues.TAG
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -44,6 +46,8 @@ import com.example.radrscan.ui.theme.RadRScanTheme
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -74,7 +78,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting() {
 
-    //val db=Firebase.firestore
+    val db= Firebase.firestore
     val context = LocalContext.current
     val apikey= com.example.radrscan.BuildConfig.apikey
     val Gemini=GenerativeModel(
@@ -159,14 +163,14 @@ fun Greeting() {
                             "Description" to description,
                             "Colour" to colour,
                             "Pattern" to pattern)
-                        /*db.collection("products")
+                        db.collection("products")
                             .add(product)
                             .addOnSuccessListener { documentReference ->
                                 Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                             }
                             .addOnFailureListener { e ->
                                 Log.w(TAG, "Error adding product", e)
-                            }*/
+                            }
                     }
                 }
 
@@ -189,10 +193,10 @@ fun Greeting() {
             )
         }
 
-        TextField(value = productname, onValueChange = {productname=it})
-        TextField(value = Description, onValueChange = {Description=it})
-        TextField(value = Pattern, onValueChange = {Pattern=it})
-        TextField(value = Colour, onValueChange = {Colour=it})
+        OutlinedTextField(value = productname, onValueChange = {productname=it}, label = { Text(text = "Name")})
+        OutlinedTextField(value = Description, onValueChange = {Description=it}, label = { Text(text = "Description")})
+        OutlinedTextField(value = Pattern, onValueChange = {Pattern=it}, label = { Text(text = "Pattern")})
+        OutlinedTextField(value = Colour, onValueChange = {Colour=it}, label = { Text(text = "Colour")})
 
 
 

@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.radrscan" />
+                  <option name="mobileSdkAppId" value="1:90185783044:android:dfc375cb6a58404c9ca251" />
+                  <option name="projectId" value="radrscan" />
+                  <option name="projectNumber" value="90185783044" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
