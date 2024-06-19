@@ -171,17 +171,22 @@ fun Greeting() {
     ) {
         if (loading){
             Column(modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(id = R.color.back))) {
+                .fillMaxSize()) {
                 val composition by rememberLottieComposition(
-                    spec = LottieCompositionSpec.RawRes(R.raw.loading_animation))
+                    spec = LottieCompositionSpec.RawRes(R.raw.loading_animatio2))
 
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                LottieAnimation(composition = composition, iterations = LottieConstants.IterateForever)
+                    Column {
+                        LottieAnimation(composition = composition, iterations = LottieConstants.IterateForever)
+                        Text(text = "Fetching Details....", color = Color.Blue, modifier = Modifier.align(Alignment.CenterHorizontally))
+                    }
+
+
                 }
+
             }
 
         }
