@@ -15,11 +15,22 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -35,6 +46,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -106,6 +118,9 @@ fun Greeting() {
     var Description by remember {
         mutableStateOf("")
     }
+    var loading by remember {
+        mutableStateOf(false)
+    }
 
 
 
@@ -131,21 +146,53 @@ fun Greeting() {
 
 
 
+
     Column(
         Modifier
             .fillMaxSize()
-            .padding(10.dp),
+            .padding(10.dp)
+            .scrollable(
+                enabled = true,
+                orientation = Orientation.Vertical,
+                state = rememberScrollState()
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
+        if (loading){
+            Column(modifier = Modifier.fillMaxSize()) {
+                val infiniteTransition = rememberInfiniteTransition()
+                val rotation by infiniteTransition.animateFloat(
+                    initialValue = 0f,
+                    targetValue = 360f,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(durationMillis = 1000, easing = LinearEasing),
+                        repeatMode = RepeatMode.Restart
+                    )
+                )
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(modifier = Modifier.rotate(rotation))
+                }
+            }
+        }
         if (capturedImageUri.path?.isNotEmpty() == true)
         {
             val bitmapimage= getBitmapFromUri(context,capturedImageUri)
             var toast=""
             LaunchedEffect (bitmapimage != null) {
                 CoroutineScope(Dispatchers.IO).launch {
+                    if (toast==""){
+                        loading=true
+                    }
                     toast=run(context,Gemini,bitmapimage!!)
                     withContext(Dispatchers.Main) {
+                        if (toast!=""){
+                            loading=false
+                        }
                         Toast.makeText(context, toast, Toast.LENGTH_LONG).show()
                         val trimmedJsonString = toast.trim().removePrefix("```json").removeSuffix("```")
                         val jsonObject = JSONObject(trimmedJsonString)
@@ -193,10 +240,10 @@ fun Greeting() {
             )
         }
 
-        OutlinedTextField(value = productname, onValueChange = {productname=it}, label = { Text(text = "Name")})
-        OutlinedTextField(value = Description, onValueChange = {Description=it}, label = { Text(text = "Description")})
-        OutlinedTextField(value = Pattern, onValueChange = {Pattern=it}, label = { Text(text = "Pattern")})
-        OutlinedTextField(value = Colour, onValueChange = {Colour=it}, label = { Text(text = "Colour")})
+        OutlinedTextField(readOnly = true, value = productname, onValueChange = {productname=it}, label = { Text(text = "Name")})
+        OutlinedTextField(readOnly = true, value = Description, onValueChange = {Description=it}, label = { Text(text = "Description")})
+        OutlinedTextField(readOnly = true, value = Pattern, onValueChange = {Pattern=it}, label = { Text(text = "Pattern")})
+        OutlinedTextField(readOnly = true, value = Colour, onValueChange = {Colour=it}, label = { Text(text = "Colour")})
 
 
 
@@ -219,8 +266,6 @@ fun Greeting() {
         }
 
     }
-
-
 
 
 }
